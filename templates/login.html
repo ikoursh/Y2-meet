@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Untitled</title>
+    <meta name="description" content="This is an example of a meta description.">
+
+</head>
+<body>
+<form id="login">
+    <label>
+        Email
+        <input id="username" type="email" name="email">
+    </label>
+    <br>
+    <label>
+        Password
+        <input id="password" type="password" name="password">
+    </label>
+    <br>
+
+
+    <input type="submit" name="action" value="Sign Up" onclick="action=`sign up`">
+    <input type="submit" name="action" value="Sign In" onclick="action=`sign in`">
+
+    <button onclick="provider(googleAuthProvider)">Log In With Google</button>
+    <button onclick="provider(githubAuthProvider)">Log In With Github</button>
+
+
+</form>
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-analytics.js"></script>
+
+<script>
+    console.log("init")
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyCHMiVHPi8SVrKk0rRPE8kcfJYFzlNHjN0",
+        authDomain: "meet-y2---final-cs-project.firebaseapp.com",
+        databaseURL: "https://meet-y2---final-cs-project.firebaseio.com",
+        projectId: "meet-y2---final-cs-project",
+        storageBucket: "meet-y2---final-cs-project.appspot.com",
+        messagingSenderId: "656420899968",
+        appId: "1:656420899968:web:03d0d47348d7f2b5202a65",
+        measurementId: "G-FKYGVVQQXT"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+    console.log(firebase)
+
+
+    // As httpOnly cookies are to be used, do not persist any state client side.
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+    let action;
+    let ue, pe;
+    window.post = function (url, data) {
+        return fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    }
+
+    function processLogin(e) {
+        if (e.preventDefault) e.preventDefault();
+        // When the user signs in with email and password.
+        firebase.auth().signInWithEmailAndPassword(ue.value, pe.value).then(user => {
+            // Get the user's ID token as it is needed to exchange for a session cookie.
+            console.log("user: ", user)
+            return user.user.getIdToken().then(idToken => tokenLogin(idToken));
+        });
+        // You must return false to prevent the default form behavior
+        return false;
+    }
+
+    function tokenLogin(idToken) {
+        console.log("id token: ", idToken)
+        return post("/sessionLogin", {
+            "idToken": idToken,
+            //"action": action
+        })
+            .then(() => {
+                // A page redirect would suffice as the persistence is set to NONE.
+                return firebase.auth().signOut();
+            }).then(() => {
+                window.location.assign('/logged_in');
+            });
+    }
+
+    window.onload = function () {
+        ue = document.getElementById("username")
+        pe = document.getElementById("password")
+
+        var form = document.getElementById('login');
+        if (form.attachEvent) {
+            form.attachEvent("submit", processLogin);
+        } else {
+            form.addEventListener("submit", processLogin);
+        }
+    }
+
+
+    {#google auth:#}
+    let googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+    let githubAuthProvider = new firebase.auth.GithubAuthProvider();
+
+    firebase.auth().languageCode = 'en';
+
+
+    function provider(provider) {
+        firebase.auth().signInWithPopup(provider).then(function (user) {
+            user.user.getIdToken().then(idToken => tokenLogin(idToken));
+        }).catch(function (error) {
+            console.log(error)
+            // TODO: Handle Errors here
+        });
+    }
+
+
+</script>
+
+</body>
+</html>
