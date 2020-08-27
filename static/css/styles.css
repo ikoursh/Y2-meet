@@ -10724,4 +10724,8 @@ header.masthead h1 {
     color: black; !important !important !important;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 

@@ -1,3 +1,13 @@
+
+
+# Start sequence
+
+print("--------------------------------------------")
+print("|               Initializing               |")
+print("|                                          |")
+print("|                                          |")
+print("| Attempting to import dependencies        |")
+
 # Imports
 import datetime
 import json
@@ -12,6 +22,33 @@ from firebase_admin import credentials, auth, exceptions, firestore
 from flask import Flask, request, render_template, flash, url_for, redirect, send_file  # App configuration
 
 from werkzeug.utils import secure_filename
+from locationiq.geocoder import LocationIQ
+
+
+print("|                                          |")
+print("| Attempting to get API key for location IQ|")
+
+try:
+    f = open("location_IQ_api.txt", "r")
+    key = f.read()
+    print(key)
+    geocoder = LocationIQ(key)
+    f.close()
+except:
+    print("\nFailed to get IQ API KEY")
+    exit(-1)
+print("| [OK]                                     |")
+print("|                                          |")
+print("| Attempting to get API key for firebase   |")
+try:
+    cred = credentials.Certificate('fbadminconfig.json')
+    firebase = firebase_admin.initialize_app(cred)
+except:
+    print("\nUnable to get firebase api key")
+    exit(-1)
+print("| [OK]                                     |")
+print("--------------------------------------------")
+
 
 # Config:
 UPLOAD_FOLDER = 'static/usr_imgs'
@@ -20,8 +57,6 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)  # Connect to firebase
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-cred = credentials.Certificate('fbadminconfig.json')  # TODO: limit permissions to service account
-firebase = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
@@ -32,6 +67,8 @@ def session_login():
     # Get the ID token sent by the client
     id_token = request.get_json(force=True)['idToken']
     # Set session expiration to 5 days.
+
+    auth.create_user()
     expires_in = datetime.timedelta(days=5)
     try:
         print("login attempt with id token: " + id_token)
@@ -146,6 +183,8 @@ def create():
     title = request.form["title"]
     desc = request.form["description"]
     text = request.form["text"]
+    # geocoder.geocode(‘Charminar Hyderabad’)
+    location = request.form["location"]
 
     if 'image' not in request.files:
         return redirect(url_for("home"))

@@ -121,16 +121,30 @@
         });
     }
 
-    function processLogin() {
-        console.log("11111111111")
-        // When the user signs in with email and password.
-        firebase.auth().signInWithEmailAndPassword(ue.value, pe.value).then(user => {
+
+    const login = function () {
+        return firebase.auth().signInWithEmailAndPassword(ue.value, pe.value).then(user => {
             // Get the user's ID token as it is needed to exchange for a session cookie.
             console.log("user: ", user)
             return user.user.getIdToken().then(idToken => tokenLogin(idToken));
         });
+    }
+    function processLogin() {
+        console.log("11111111111")
+        // When the user signs in with email and password.
+
+        login()
+            .catch(err => {
+                if (err.code === 'auth/user-not-found') {
+                    firebase.auth().createUserWithEmailAndPassword(
+                        ue.value, pe.value
+                    ).then(login)
+                    // User doesn't exist yet, create it...
+                }
+            });
         // You must return false to prevent the default form behavior
     }
+
 
     function tokenLogin(idToken) {
         console.log("id token: ", idToken)
@@ -149,7 +163,10 @@
     window.onload = function () {
         ue = document.getElementById("username")
         pe = document.getElementById("password")
-        document.getElementById("login").addEventListener("submit", (e)=>{e.preventDefault(); return false})
+        document.getElementById("login").addEventListener("submit", (e) => {
+            e.preventDefault();
+            return false
+        })
     }
 
 
