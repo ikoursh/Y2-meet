@@ -6,6 +6,20 @@
 </head>
 <body>
 
+<link type="text/css" rel="stylesheet" href="{{ url_for("static", filename="header.css") }}">
+
+<div id="header">
+    <img id="logo" src="{{ url_for("static", filename="logo-dark.png") }}">
+    <ul id="links">
+        <li class="nav-item"><a class="page_link" href="/">Home</a></li>
+        <li class="nav-item"><a class="page_link" href="/#about">About Us</a></li>
+        <li class="nav-item"><a class="page_link" href="/volunteer">Volunteer</a></li>
+        <li class="nav-item"><a class="page_link" href="/login">Login</a></li>
+        <li class="nav-item"><a class="page_link" href="/#contact">Contact</a></li>
+    </ul>
+</div>
+
+
 <form enctype="multipart/form-data" method="POST">
     <label>
         Title:
