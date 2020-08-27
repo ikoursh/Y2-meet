@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form enctype="multipart/form-data" method="POST">
+    <label>
+        Title:
+        <input type="text" name="title" value="Lorem ipsum" required>
+    </label>
+    <br>
+
+
+    <label>
+        Description:
+        <input type="text" name="description" value="dolor sit amet" required>
+    </label>
+    <br>
+
+
+    <label>
+        Text:
+        <br>
+        <textarea id="w3review" name="text" rows="4" cols="50" required>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </textarea>
+    </label>
+    <br>
+
+
+    <label>
+        <input type="file" accept="image/png, image/jpg, image/jpeg" name="image">
+        <br>
+        Select image
+    </label>
+    <br>
+    <input type="submit" value="POST" required>
+    <br>
+
+</form>
+
+</body>
+</html>

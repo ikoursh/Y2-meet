@@ -3,31 +3,64 @@
 <head>
     <meta charset="utf-8">
     <title>Untitled</title>
-    <meta name="description" content="This is an example of a meta description.">
+    <link type="text/css" rel="stylesheet" href="{{ url_for("static", filename="login.css") }}">
+
 
 </head>
 <body>
-<form id="login">
-    <label>
-        Email
-        <input id="username" type="email" name="email">
-    </label>
-    <br>
-    <label>
-        Password
-        <input id="password" type="password" name="password">
-    </label>
-    <br>
+
+<div id="white">
+    <h1>Login/Sign Up</h1>
+
+    <form id="login">
+        <label>
+            <h4>Email</h4>
+            <input class="input" id="username" type="email" name="email" required placeholder="test@gmail.com">
+        </label>
+        <br>
+        <label>
+            <h4>Password</h4>
+            <input class="input" id="password" type="password" name="password" required placeholder="123456">
+        </label>
+        <br>
+
+        <button id="go" onclick="processLogin()">GO</button>
 
 
-    <input type="submit" name="action" value="Sign Up" onclick="action=`sign up`">
-    <input type="submit" name="action" value="Sign In" onclick="action=`sign in`">
+    </form>
 
-    <button onclick="provider(googleAuthProvider)">Log In With Google</button>
-    <button onclick="provider(githubAuthProvider)">Log In With Github</button>
+    <div style="width: 100%; display: table;">
+        <div style="display: table-row">
+            <div class="login col s12 m6 offset-m3 center-align" onclick="provider(googleAuthProvider)">
+                <a class="oauth-container btn darken-4 white black-text" style="text-transform:none">
+                    <div class="left">
+                        <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in"
+                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+                    </div>
+                    Login with Google
+                </a>
+            </div>
+
+            <div class="login col s12 m6 offset-m3 center-align" onclick="provider(githubAuthProvider)">
+                <a class="oauth-container btn darken-4 white black-text" style="text-transform:none">
+                    <div class="left">
+                        <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in"
+                             src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg"/>
+                    </div>
+                    Login with Github
+                </a>
+            </div>
+        </div>
+    </div>
 
 
-</form>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+</div>
 
 
 <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -54,7 +87,7 @@
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
+    {#firebase.analytics();#}
 
     console.log(firebase)
 
@@ -74,8 +107,8 @@
         });
     }
 
-    function processLogin(e) {
-        if (e.preventDefault) e.preventDefault();
+    function processLogin() {
+        console.log("11111111111")
         // When the user signs in with email and password.
         firebase.auth().signInWithEmailAndPassword(ue.value, pe.value).then(user => {
             // Get the user's ID token as it is needed to exchange for a session cookie.
@@ -83,42 +116,37 @@
             return user.user.getIdToken().then(idToken => tokenLogin(idToken));
         });
         // You must return false to prevent the default form behavior
-        return false;
     }
 
     function tokenLogin(idToken) {
         console.log("id token: ", idToken)
         return post("/sessionLogin", {
             "idToken": idToken,
-            //"action": action
         })
             .then(() => {
-                // A page redirect would suffice as the persistence is set to NONE.
                 return firebase.auth().signOut();
             }).then(() => {
                 window.location.assign('/logged_in');
+            }).catch((e) => {
+                console.log(e)
             });
     }
 
     window.onload = function () {
         ue = document.getElementById("username")
         pe = document.getElementById("password")
-
-        var form = document.getElementById('login');
-        if (form.attachEvent) {
-            form.attachEvent("submit", processLogin);
-        } else {
-            form.addEventListener("submit", processLogin);
-        }
+        document.getElementById("login").addEventListener("submit", (e)=>{e.preventDefault(); return false})
     }
 
 
     {#google auth:#}
     let googleAuthProvider = new firebase.auth.GoogleAuthProvider();
     let githubAuthProvider = new firebase.auth.GithubAuthProvider();
+    githubAuthProvider.addScope("user:email")
 
     firebase.auth().languageCode = 'en';
 
+    console.log(googleAuthProvider)
 
     function provider(provider) {
         firebase.auth().signInWithPopup(provider).then(function (user) {

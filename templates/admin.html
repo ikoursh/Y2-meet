@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<h1>
+    Admin dashboard
+</h1>
+
+<h2>Delete admin</h2>
+{% for u in users %}
+    <img style="width: 20px" src="{{ u["img"] }}">
+    User {{ u["name"] }} ({{ u["email"] }}) at level {{ u["lvl"] }}
+    <img style="width: 20px" src="{{ url_for("static", filename="delete.png") }}"
+             onclick="remove_user(`{{ u["uid"] }}`, `{{ u["name"] }}`, `{{ u["email"] }}`)">
+    <br>
+{% endfor %}
+<br>
+<h2>Create Admin</h2>
+<form method="post" action="/create_admin">
+    <label>
+        Email:
+        <input type="email" name="email" required>
+    </label>
+    <br>
+    <label>
+        Level:
+        <select name="level">
+            <option value="1">Post</option>
+            <option value="5">Post&Admin</option>
+        </select>
+    </label>
+    <input type="submit">
+</form>
+
+<script>
+
+    window.post = function (url, data) {
+        return fetch(url, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    }
+
+    function remove_user(uid, name, email) {
+        if (confirm(`Really delete user ${name} (${email})?`)) {
+            post("/remove_admin", {"uid": uid})
+            {#location.reload()#}
+        }
+    }
+
+</script>
+</body>
+</html>

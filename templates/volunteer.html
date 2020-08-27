@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ url_for("static", filename="volunteer.css") }}">
+
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="wrapper">
+    {% for o in data %}
+        <a href="opportunity/{{ o["id"] }}">
+            <div class="opt">
+                <h3>{{ o["title"] }}</h3>
+                <h4>{{ o["desc"] }}</h4>
+                <img src="{{ o["img"] }}">
+
+            </div>
+        </a>
+
+    {% endfor %}
+</div>
+
+</body>
+</html>

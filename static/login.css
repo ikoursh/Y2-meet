@@ -1,0 +1,72 @@
+body{
+    margin: 0;
+    background-image: url("blur.png");
+    width: 100%;
+    height: 100%;
+    background-size: cover
+}
+
+#white{
+    padding: 20px 60px;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    text-align: center;
+}
+
+#login{
+    text-align: left;
+}
+
+
+.input{
+    /*color: lightgray;*/
+    font-size: 20px;
+    width: 100%;
+    border-radius: 5px;
+    border-color: lightgray;
+    border-style: solid;
+}
+
+h1{
+    padding-bottom: 20px;
+    font-weight: normal;
+    font-size: 50px;
+}
+
+h4{
+    margin-bottom: 0 !important;
+    margin-top: 10px;
+    font-weight: normal;
+    font-size: 20px !important;
+}
+
+*{
+    font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;
+}
+
+#go{
+    padding: 10px;
+    margin: 20px 0;
+    width: 100%;
+    color: white;
+    background-color: #51CAB2;
+    border-radius: 20px;
+    border:none;
+    font-size: 20px;
+}
+
+#go:active{
+    background-color: #55af9d;
+}
+
+.login{
+    width: 50%;
+    cursor: pointer;
+    font-family: Roboto, sans-serif;
+    display: table-cell;
+}
