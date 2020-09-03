@@ -1,3 +1,7 @@
+**NOTICE: This project is no longer being hosted**
+======
+
+
 # Y2-meet
 
 Hello and welcome to the final Y2 meet project.
